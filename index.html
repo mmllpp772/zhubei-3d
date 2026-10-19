@@ -5,13 +5,13 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:15px/1
 h1{font-size:19px;margin:0 0 4px}p{margin:0 0 16px;color:var(--mut);font-size:13px}input[type=password]{width:100%;box-sizing:border-box;font-size:17px;padding:11px 12px;border:1px solid #9bb3b3;border-radius:6px;background:transparent;color:inherit}
 button{margin-top:12px;width:100%;padding:11px;border:0;border-radius:6px;background:var(--acc);color:#fff;font-size:16px;cursor:pointer}button:disabled{opacity:.6}label{display:flex;gap:6px;align-items:center;margin-top:10px;font-size:13px;color:var(--mut)}#m{min-height:20px;margin-top:10px;font-size:13px;color:#c0392b}</style></head>
 <body><div class="w"><form id="f" action="javascript:void 0" onsubmit="return false"><h1>緯創資通各廠區 3D 漫遊</h1><p>內部版本，請輸入密碼開啟。</p><input id="pw" type="password" autocomplete="current-password" placeholder="密碼" autofocus required><label><input id="rem" type="checkbox"> 在這台裝置記住</label><button id="b" disabled>下載中…</button><div id="m"></div></form></div>
-<script>const S="B4b74rZTBBX5Pmg1WzfJgQ==",V="sHHlQ8jPMaTkeyDH",I=310000;let D=null,want=null;
+<script>const S="cSJ2kJa1sT67xRKu3TUX7g==",V="uHaSjK+GfcIK2EyG",I=310000;let D=null,want=null;
 const u=s=>typeof s!=='string'?s:Uint8Array.from(atob(s),c=>c.charCodeAt(0)),K='zb3d-key-'+S.slice(0,8);
 async function open(raw,rem){const k=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);let pt;try{pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:u(V)},k,u(D));}catch(_){throw new Error('pw');}if(rem){try{localStorage.setItem(K,btoa(String.fromCharCode(...raw)));}catch(_){}}
  const html=await new Response(new Blob([pt]).stream().pipeThrough(new DecompressionStream('gzip'))).text();document.open();document.write(html);document.close();}
 async function derive(pw){const b=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);return new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',salt:u(S),iterations:I,hash:'SHA-256'},b,256));}
 const m=document.getElementById('m'),btn=document.getElementById('b');
-const ready=(async()=>{for(let t=0;;t++){try{const r=await fetch('data.bin?v=e8fd54d4b7');if(!r.ok)throw new Error(r.status);const n=+r.headers.get('content-length')||0,rd=r.body.getReader(),parts=[];let got=0;
+const ready=(async()=>{for(let t=0;;t++){try{const r=await fetch('data.bin?v=d7d64d8fe6');if(!r.ok)throw new Error(r.status);const n=+r.headers.get('content-length')||0,rd=r.body.getReader(),parts=[];let got=0;
  for(;;){const {done,value}=await rd.read();if(done)break;parts.push(value);got+=value.length;btn.textContent=n?'下載中… '+Math.min(99,Math.round(got/n*100))+'%':'下載中… '+(got/1048576).toFixed(1)+' MB';}
  D=new Uint8Array(await new Blob(parts).arrayBuffer());btn.disabled=false;btn.textContent='開啟';return;}catch(e){if(t>=2){btn.textContent='下載失敗，請重新整理';throw e;}await new Promise(r=>setTimeout(r,1500));}}})();
 (async()=>{await ready;let s=null;try{s=localStorage.getItem(K);}catch(e){}if(s){m.style.color='inherit';m.textContent='載入中…';try{await open(u(s));return;}catch(e){try{localStorage.removeItem(K);}catch(_){}m.textContent='';}}})();
