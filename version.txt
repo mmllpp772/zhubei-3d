@@ -1,1 +1,1 @@
-build 2026-10-20T11:27:30Z data-3c664b1a86.bin cubicles
+build 2026-10-20T11:28:48Z data-7e7606433d.bin taller-partitions
