@@ -1,1 +1,1 @@
-build 2026-10-20T11:23:43Z data-bc3f477e01.bin rooms
+build 2026-10-20T11:27:30Z data-3c664b1a86.bin cubicles
