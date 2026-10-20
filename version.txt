@@ -1,1 +1,1 @@
-build 2026-10-20T06:38:20Z data.bin?v=74135ed326 kites-xiangshan
+build 2026-10-20T06:39:16Z data.bin?v=62dce1be2a nav-cleanup
