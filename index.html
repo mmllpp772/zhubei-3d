@@ -5,7 +5,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:15px/1
 h1{font-size:19px;margin:0 0 4px}p{margin:0 0 16px;color:var(--mut);font-size:13px}input[type=password]{width:100%;box-sizing:border-box;font-size:17px;padding:11px 12px;border:1px solid #9bb3b3;border-radius:6px;background:transparent;color:inherit}
 button{margin-top:12px;width:100%;padding:11px;border:0;border-radius:6px;background:var(--acc);color:#fff;font-size:16px;cursor:pointer}button:disabled{opacity:.6}label{display:flex;gap:6px;align-items:center;margin-top:10px;font-size:13px;color:var(--mut)}#m{min-height:20px;margin-top:10px;font-size:13px;color:#c0392b}</style></head>
 <body><div class="w"><form id="f" action="javascript:void 0" onsubmit="return false"><h1>緯創資通各廠區 3D 漫遊</h1><p>內部版本，請輸入密碼開啟。</p><input id="pw" type="password" autocomplete="current-password" placeholder="密碼" autofocus required><label><input id="rem" type="checkbox"> 在這台裝置記住</label><button id="b" disabled>下載中…</button><div id="m"></div></form></div>
-<script>const REPO='mmllpp772/zhubei-3d',S="Fckz7cFxYy6B6w6YRE0V4w==",V="y/gAf3qH65etSBcX",I=310000;let D=null,want=null;
+<script>const REPO='mmllpp772/zhubei-3d',S="4+YZfX73XythDi+klwFQNw==",V="IO6754htzn1GiGjV",I=310000;let D=null,want=null;
 const u=s=>typeof s!=='string'?s:Uint8Array.from(atob(s),c=>c.charCodeAt(0)),K='zb3d-key-'+S.slice(0,8);
 async function open(raw,rem){const k=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);let pt;try{pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:u(V)},k,u(D));}catch(_){throw new Error('pw');}if(rem){try{localStorage.setItem(K,btoa(String.fromCharCode(...raw)));}catch(_){}}
  const html=await new Response(new Blob([pt]).stream().pipeThrough(new DecompressionStream('gzip'))).text();window.__zk=raw;document.open();document.write(html);document.close();}
@@ -13,11 +13,11 @@ async function derive(pw){const b=await crypto.subtle.importKey('raw',new TextEn
 const m=document.getElementById('m'),btn=document.getElementById('b');
 // the same file from several hosts at once (GitHub Pages is slow / unreliable from some networks, e.g. mainland China);
 // after a few seconds only the fastest download is kept, and the result is checked against its SHA-256 before use
-const F='data-bcbb74c678.bin',SRC=[F,'https://cdn.jsdelivr.net/gh/'+REPO+'@main/'+F,'https://fastly.jsdelivr.net/gh/'+REPO+'@main/'+F,'https://gcore.jsdelivr.net/gh/'+REPO+'@main/'+F];
+const F='data-d1a9da2db4.bin',SRC=[F,'https://cdn.jsdelivr.net/gh/'+REPO+'@main/'+F,'https://fastly.jsdelivr.net/gh/'+REPO+'@main/'+F,'https://gcore.jsdelivr.net/gh/'+REPO+'@main/'+F];
 async function grab(){const L=SRC.map(url=>({url,ac:new AbortController(),got:0,n:0,parts:[],done:false,err:null}));let best=null;
- const show=()=>{const s=L.reduce((a,b)=>(b.got>a.got?b:a),L[0]);const n=s.n||1115861;btn.textContent='下載中… '+Math.min(99,Math.round(s.got/n*100))+'%';};
+ const show=()=>{const s=L.reduce((a,b)=>(b.got>a.got?b:a),L[0]);const n=s.n||1116244;btn.textContent='下載中… '+Math.min(99,Math.round(s.got/n*100))+'%';};
  const run=async S=>{try{const r=await fetch(S.url,{signal:S.ac.signal,cache:'no-cache'});if(!r.ok)throw new Error(r.status);S.n=+r.headers.get('content-length')||0;const rd=r.body.getReader();for(;;){const {done,value}=await rd.read();if(done)break;S.parts.push(value);S.got+=value.length;show();}S.done=true;return S;}catch(e){S.err=e;throw e;}};
- const P=L.map(S=>run(S).then(S=>{const d=new Uint8Array(S.got);let o=0;for(const p of S.parts){d.set(p,o);o+=p.length;}return crypto.subtle.digest('SHA-256',d).then(h=>{const hex=[...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join('').slice(0,10);if(hex!=='bcbb74c678')throw new Error('hash');return d;});}));
+ const P=L.map(S=>run(S).then(S=>{const d=new Uint8Array(S.got);let o=0;for(const p of S.parts){d.set(p,o);o+=p.length;}return crypto.subtle.digest('SHA-256',d).then(h=>{const hex=[...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join('').slice(0,10);if(hex!=='d1a9da2db4')throw new Error('hash');return d;});}));
  // keep only the leader after 4 s (or as soon as one host has clearly failed)
  setTimeout(()=>{const alive=L.filter(S=>!S.err);if(alive.length<2)return;const lead=alive.reduce((a,b)=>b.got>a.got?b:a);if(lead.got>0)for(const S of alive)if(S!==lead)S.ac.abort();},4000);
  const d=await Promise.any(P);for(const S of L)S.ac.abort();return d;}
